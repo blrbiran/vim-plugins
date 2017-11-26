@@ -1,11 +1,12 @@
-# Compiled
-*.elc
-
-# Packaging
-.cask
-
 # Backup files
 *~
+.DS_Store
+*.swp
+*.cache
+.netrwhist
+/test
 
-# Undo-tree save-files
-*.~undo-tree
+
+!*.vim
+!*.md
+!*.rst
