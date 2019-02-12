@@ -30,6 +30,7 @@ Plugin 'gmarik/Vundle.vim'
 " let plugin installed
 Plugin 'fatih/vim-go'
 Plugin 'majutsushi/tagbar'
+Plugin 'scrooloose/nerdtree'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'SirVer/ultisnips'
 
@@ -112,9 +113,6 @@ elseif has('unix')
 elseif has('mac')
 endif
 
-" Auto search tags file
-set tags=tags;
-"map <C-F12> <Esc>:!ctags -R .<cr>
 "map <F6> <Esc>:TlistToggle<cr><Esc>
 "let Tlist_Show_One_File=1
 "let Tlist_Exit_OnlyWindow=1
@@ -127,6 +125,8 @@ set tags=tags;
 
 " Open tagbar plugin <F6>
 nmap <F6> :TagbarToggle<cr>
+" For tagbar update slow
+set updatetime=500
 
 " New Tab
 nnoremap <silent> <C-c> :tabnew<cr>
@@ -223,6 +223,9 @@ nmap <Leader>w <Plug>(easymotion-overwin-w)
 " Change the default mapping and the default command to invoke CtrlP
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+" search more sub folders
+let g:ctrlp_max_files=0
+let g:ctrlp_max_depth=5
 " When invoked without an explicit starting directory, CtrlP will set its local working directory according to this variable
 let g:ctrlp_working_path_mode = 'ra'
 " If none of the default markers (.git .hg .svn .bzr _darcs) are present in a project, you can define additional ones with g:ctrlp_root_markers
@@ -242,6 +245,36 @@ let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
 "let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
 " Ignore files in .gitignore
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
+" NERDTree
+""将F2设置为开关NERDTree的快捷键
+map <f2> :NERDTreeToggle<cr>
+""开启Nerdtree时自动显示Bookmarks
+"let NERDTreeShowBookmarks=1
+""自动开启Nerdtree
+"autocmd vimenter * NERDTree
+"打开vim时如果没有文件自动打开NERDTree
+autocmd vimenter * if !argc()|NERDTree|endif
+"当NERDTree为剩下的唯一窗口时自动关闭
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+""修改树的显示图标
+"let g:NERDTreeDirArrowExpandable = '+'
+"let g:NERDTreeDirArrowCollapsible = '-'
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+""窗口位置
+let g:NERDTreeWinPos='left'
+""Window Size
+let g:NERDTreeSize=30
+""窗口是否显示行号
+let g:NERDTreeShowLineNumbers=1
+""不显示隐藏文件
+let g:NERDTreeHidden=0
+""过滤所有.pyc文件不显示
+let NERDTreeIgnore = ['\.pyc$']
+""Making it prettier
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 
 " Vim-go
 " Disable auto download
@@ -286,3 +319,17 @@ set cscopequickfix=s-,c-,d-,i-,t-,e-
 nmap <S-j> <Esc>:cn<cr>
 nmap <S-k> <Esc>:cp<cr>
 
+" Auto search tags file
+set tags=tags;
+"map <C-F12> <Esc>:!ctags -R .<cr>
+" Default search tag than cscope
+set cscopetagorder=0
+
+nmap <C-@>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>
